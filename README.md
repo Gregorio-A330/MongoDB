@@ -22,8 +22,7 @@
         alias mongod="/c/Program\ files/MongoDB/Server/4.4/bin/mongod.exe"
         alias mongo="/c/Program\ Files/MongoDB/Server/4.4/bin/mongo.exe"
 
-// lembrar que tem que verificar qual a versão do mongo que foi instalada e se precisar alterar de 4.4 para a sua 
-// versão instalada
+// lembrar que tem que verificar qual a versão do mongo que foi instalada e se precisar alterar de 4.4 para a sua versão instalada
 
 // feito isso para executar o mongo, basta apenas abrir o terminal de sua preferencia e digitar mongo
 
