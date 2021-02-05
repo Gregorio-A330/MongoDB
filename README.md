@@ -16,6 +16,7 @@
 // comandos de ajuda:
 
 help
+
         db.help()                    help on db methods
         db.mycoll.help()             help on collection methods
         sh.help()                    sharding helpers
@@ -25,7 +26,6 @@ help
         help keys                    key shortcuts
         help misc                    misc things to know
         help mr                      mapreduce
-
         show dbs                     show database names
         show collections             show collections in current database
         show users                   show users in current database
@@ -44,14 +44,14 @@ help
 //mostra os bancos que estão rodando
 ///se for a primeira vez... só irão aparecer os padrões
 
-show dbs
+>show dbs
 admin   0.000GB
 config  0.000GB
 local   0.000GB
 
 // para usar um banco
 
-use shopDB
+>use shopDB
 // vai utilizar um banco, porém, ele só irá aparecer quando tiver algum dado internamente
 
 //comando:
@@ -81,36 +81,44 @@ products
 
 //comando:
 > db.products.find({name: "Pencil"}) // neste caso indicanto um parametro no find como se fosse um 'select name from products where name = pencil'
+
 { "_id" : 2, "name" : "Pencil", "price" : 0.8 }
 
 //indicando parametros de busca mais detalhados
 //comando:
 
 > db.products.find({price: {$gt: 1}}) //neste caso procurando pelo preço sendo ele maior que 1
+
 { "_id" : 1, "name" : "Pen", "price" : 1.2 } 
 
 
 //comando:
 > db.products.find({_id: 1}, {name: 1}) //primeiro id e nome sendo true, retornando o id 1 e o nome "Pen"
+
 { "_id" : 1, "name" : "Pen" }
 
 > db.products.find({_id: 1}, {name: 1, _id: 0}) // segundo parametro trazendo o nome e id como false, fazendo com que só retorne o nome
+
 { "name" : "Pen" }
 
 
 
 //Update Operations
 //comando:
+
 > db.products.find() //para mostrar o que contem dentro do banco e o que vamos alterar
+
 { "_id" : 1, "name" : "Pen", "price" : 1.2 }   
 { "_id" : 2, "name" : "Pencil", "price" : 0.8 }
 
 //comando:
 > db.products.updateOne({_id: 1},{$set:{stock: 32}}) // Update no id 1 e colocando como segundo parametro como set e o que eu quero incluir, no caso uma nova "coluna"
+
 { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 } // informando que deu tudo certo
 
 //comando:
 > db.products.find() //verificando as alterações, incluido o stock com valor 32
+
 { "_id" : 1, "name" : "Pen", "price" : 1.2, "stock" : 32 }
 { "_id" : 2, "name" : "Pencil", "price" : 0.8 }
 
@@ -118,20 +126,28 @@ products
 //mesma situação para caso queira alterar algo que ja exista
 
 //comando:
+
 > db.products.updateOne({_id: 2},{$set:{stock: 12}})  //incluindo o stock no id 2
+
 { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
 
 //comando:
+
 > db.products.find() //conferindo se deu tudo certo
+
 { "_id" : 1, "name" : "Pen", "price" : 1.2, "stock" : 32 }
 { "_id" : 2, "name" : "Pencil", "price" : 0.8, "stock" : 12 }
 
 //comando:
+
 > db.products.updateOne({_id: 2},{$set:{stock: 52}}) //alterando o stock do id 2 para 52 
+
 { "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
 
 //comando:
+
 > db.products.find() //conferindo novamente se deu tudo certo
+
 { "_id" : 1, "name" : "Pen", "price" : 1.2, "stock" : 32 }
 { "_id" : 2, "name" : "Pencil", "price" : 0.8, "stock" : 52 } <-----alterado------
 
@@ -140,10 +156,13 @@ products
 //Delete Operations
 
 //comando:
+
 > db.products.deleteOne({_id:2}) //apagar uma linha pelo id 2
+
 { "acknowledged" : true, "deletedCount" : 1 } //informando que deu tudo certo
 
 > db.products.find() //confirmando o resultado
+
 { "_id" : 1, "name" : "Pen", "price" : 1.2, "stock" : 32 } //só retornou um resultado, logo deu tudo certo
 
 
