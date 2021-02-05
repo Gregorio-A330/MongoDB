@@ -2,7 +2,7 @@
 
 ## instalação
 
-// para instalar o mongodb só acessar o site principal e se for no windows baixar o LTS com a extensão MSI
+// para instalar o mongodb só acessar o site principal https://www.mongodb.com/try/download/community e se for no windows baixar o LTS com a extensão MSI
 
 // abrir o terminal eeeeeeee indicar a raiz do seu sistema via 
 
