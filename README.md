@@ -200,6 +200,8 @@ shopDB
                 ]
         })
 
-//Aqui entra a parte de relacionamento no documento, no review tem um array
+// Aqui entra a parte de relacionamento no documento, no review tem um array
+
 // contendo dois documentos dentro que são separados por { } que está dentro do documento principal de id 3
+
 // neste caso estão encadeados e armazenados dentro do array review
