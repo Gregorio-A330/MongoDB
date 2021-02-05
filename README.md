@@ -13,7 +13,7 @@
 > touch .bash_profile
 
 // se preferir utilizar o VIM dentro do proprio terminal (hyperTerminal)
-// e atualizar o arquivo
+// e atualizar o arquivo, dentro do VIM pressione I para iniciar a digitação...
 
 > vim .bash_profile
 
@@ -23,6 +23,8 @@
         alias mongo="/c/Program\ Files/MongoDB/Server/4.4/bin/mongo.exe"
 
 // lembrar que tem que verificar qual a versão do mongo que foi instalada e se precisar alterar de 4.4 para a sua versão instalada
+
+// Ensinar um macete pra conseguir sair do VIM e não ficar preso pela eternidade... pressione ESC depois de inserir as duas linhas de código e digite :wq! para salvar e sair do VIM... Pronto!
 
 // feito isso para executar o mongo, basta apenas abrir o terminal de sua preferencia e digitar mongo
 
