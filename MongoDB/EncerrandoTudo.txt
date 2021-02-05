@@ -1,0 +1,7 @@
+//Sai e esqueci de encerrar o mongod
+
+//abre um novo terminal e poste isso abaixo
+
+sudo pkill -f mongod
+
+//pronto

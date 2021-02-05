@@ -1,0 +1,246 @@
+##Criando o acesso do mongo para uso local
+
+**** lembrar de iniciar o mongod em outro terminal para que tudo funcione
+
+//Criando um novo projeto e incluindo os devidos pacotes
+
+-> npm init -y 
+-> npm i mongodb
+
+//incluindo o código de conexão ao banco no app.js
+
+const MongoClient = require("mongodb").MongoClient;
+const assert = require('assert');
+
+//url de conexão
+const url = 'mongodb://localhost:27017';
+
+//nome do banco
+const dbName = 'fruitsDB';
+
+const client = new MongoClient(url, { useUnifiedTopology: true });
+
+client.connect(function (err) {
+    assert.strictEqual(null, err);
+    console.log("connected successfully to server");
+
+    const db = client.db(dbName);
+
+    client.close();   
+});
+
+//rodando o app.js
+
+> node app.js
+connected successfully to server
+
+// nos informou que deu tudo certo com a conexão
+
+//abaixo temos o código atualizado com uma função de inserir conteudo no banco
+
+---------------------------------Código-------------------------------------
+
+const MongoClient = require("mongodb").MongoClient;
+const assert = require('assert');
+
+const url = 'mongodb://localhost:27017';
+
+const dbName = 'fruitsDB';
+
+const client = new MongoClient(url, { useUnifiedTopology: true });
+
+//inicia a conexão como banco e faz o que bem entender internamente como 
+//inserir ou deletar ou o que quer se seja dentro da conexão
+
+client.connect(function (err) {
+    assert.strictEqual(null, err);
+    console.log("connected successfully to server");
+
+    const db = client.db(dbName);
+
+
+    //vai inserir o conteudo da função abaixo e depois encerra a conexão com o banco
+    insertDocuments(db, function(){
+        client.close();  //fecha a conexão
+    });
+    
+});
+
+const insertDocuments = function (db, callback) {
+    // Pegando alguns documentos da coleção
+    const collection = db.collection('fruits');
+    // inserindo alguns documentos
+    collection.insertMany([
+        {
+            name: "apple",
+            score: 8,
+            review: "Great fruit"
+        },
+        {
+            name: "orange",
+            score: 6,
+            review: "Kinda sour"
+        },
+        {
+            name: "banana",
+            score: 11,
+            review: "Wow it's a BANANA"
+        }
+    ], function (err, result) {
+        assert.strictEqual(err, null); //validando para ver se não há erros na inserção do documento
+        assert.strictEqual(3, result.result.n); //apenas verificando se há realmente 3 inserções no nossp documento
+        assert.strictEqual(3, result.ops.length); //apenas verificando se há realmente 3 inserções no nossp documento
+        console.log("inserted 3 documents into the collection"); // apenas mostrar no console 
+        callback(result);
+    });
+}
+
+// se tudo estiver certo e executarmos novamente 
+
+> node app.js
+
+// deve nos retornar o resultado abaixo:
+
+connected successfully to server
+inserted 3 documents into the collection
+
+//testando a validação...
+
+//caso insira algo no documento que tenha menos de 3 itens... segue o erro 
+//***isso não impede a inserção, neste caso está apenas como um alerta*** 
+
+collection.insertMany([
+        {
+            name: "apple",
+            score: 8,
+            review: "Great fruit"
+        },
+        {
+            name: "orange",
+            score: 6,
+            review: "Kinda sour"
+        }
+        ], function (err, result) {...}
+
+C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\utils.js:106
+      throw err;
+      ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+
+3 !== 2
+
+    at C:\Users\biel\Desktop\FruitsProject\app.js:46:16
+    at executeCallback (C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\operations\execute_operation.js:70:5)
+    at C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\operations\insert_many.js:43:7
+    at C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\operations\bulk_write.js:99:7
+    at C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\utils.js:384:17
+    at executeCallback (C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\utils.js:376:9)
+    at handleCallback (C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\utils.js:102:55)
+    at executeCommands (C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\bulk\common.js:497:12)
+    at resultHandler (C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\bulk\common.js:524:5)
+    at handler (C:\Users\biel\Desktop\FruitsProject\node_modules\mongodb\lib\core\sdam\topology.js:943:24) {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: 3,
+  expected: 2,
+  operator: 'strictEqual'
+}
+
+// O interessante é que podemos criar tipos de validações ao inserir utilizando o assert.strictEqual() para a quantidade 
+// de itens dentro do array, no intuito de ao passar as informações, não esquecermos de nada podendo ser uma inserção de um "FOR" gigante
+// com varios itens dentro do array, ***lembrando que isso não impede a inserção neste caso irá apenas soar um alerta*** 
+// e como não é um erro fatal ele vai inserir se não tiver uma chave primaria => {_id: algo}
+
+//agora aquela duvida de que realmente criou o banco e inserimos tudo ou foi algo temporario?
+
+// dentro do terminal... digite mongo para abrir o o shell
+> mongo
+
+// em seguida digite show dbs para mostrar os bancos
+
+> show dbs
+admin     0.000GB
+config    0.000GB
+fruitsDB  0.000GB <-----
+local     0.000GB
+shopDB    0.000GB
+test      0.000GB
+
+//podemos ver o banco criado
+
+> use fruitsDB //usar o banco
+switched to db fruitsDB
+> show collections //mostrar os documentos criados ou coleções
+fruits
+> db.fruits.find() //mandar mostrar tudo que tem dentro da coleção fruits
+{ "_id" : ObjectId("601d695a0260263b08d008f0"), "name" : "apple", "score" : 8, "review" : "Great fruit" } <--- primeira inserção
+{ "_id" : ObjectId("601d695a0260263b08d008f1"), "name" : "orange", "score" : 6, "review" : "Kinda sour" } <--- primeira inserção
+{ "_id" : ObjectId("601d695a0260263b08d008f2"), "name" : "banana", "score" : 11, "review" : "Wow it's a BANANA" } <--- primeira inserção
+{ "_id" : ObjectId("601d6a3893ee253920a12adc"), "name" : "apple", "score" : 8, "review" : "Great fruit" } <--- Segunda inserção
+{ "_id" : ObjectId("601d6a3893ee253920a12add"), "name" : "orange", "score" : 6, "review" : "Kinda sour" } <--- Segunda inserção
+
+
+
+// procurando arquivos dentro do app.js
+
+// insira isso logo abaixo da função de inserção
+
+const findDocuments = function (db, callback) {
+    //pegando os documentos da coleção
+    const collection = db.collection('fruits');  // procurando a coleção "fruits"
+    //procurando alguns documentos
+    collection.find({}).toArray(function (err, fruits) {  //find({}) <-- procurando tudo e transformando em um array
+        assert.strictEqual(err, null) //tratativa de erro
+        console.log("found the following records");
+        console.log(fruits) // vai dar o log com o conteudo de colletion.find
+        callback(fruits) //retorna a coleção
+    });
+}
+
+// e altere o código da conexão do banco removendo o insert e colocando a nova função find
+
+
+    //insertDocuments(db, function(){
+    findDocuments(db, function () {   //<---------
+        client.close();  //fecha a conexão
+    });
+
+
+//resultado:
+
+> node app.js
+connected successfully to server
+found the following records
+[
+  {
+    _id: 601d695a0260263b08d008f0,
+    name: 'apple',
+    score: 8,
+    review: 'Great fruit'
+  },
+  {
+    _id: 601d695a0260263b08d008f1,
+    name: 'orange',
+    score: 6,
+    review: 'Kinda sour'
+  },
+  {
+    _id: 601d695a0260263b08d008f2,
+    name: 'banana',
+    score: 11,
+    review: "Wow it's a BANANA"
+  },
+  {
+    _id: 601d6a3893ee253920a12adc,
+    name: 'apple',
+    score: 8,
+    review: 'Great fruit'
+  },
+  {
+    _id: 601d6a3893ee253920a12add,
+    name: 'orange',
+    score: 6,
+    review: 'Kinda sour'
+  }
+]

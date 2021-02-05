@@ -1,0 +1,30 @@
+para instalar o mongodb só acessar o site principal e se for no windows baixar o LTS com a extensão MSI
+
+abrir o terminal eeeeeeee indicar a raiz do seu sistema via 
+
+cd ~
+
+depois criar um arquivo oculto bash
+
+touch .bash_profile
+
+se preferir utilizar o VIM dentro do proprio terminal (hyperTerminal)
+e atualizar o arquivo
+
+vim .bash_profile
+
+e atualizar com esses dois códigos
+
+alias mongod="/c/Program\ files/MongoDB/Server/4.4/bin/mongod.exe"
+alias mongo="/c/Program\ Files/MongoDB/Server/4.4/bin/mongo.exe"
+
+lembrar que tem que verificar qual a versão do mongo que foi instalada e se precisar alterar de 4.4 para a sua 
+versão instalada
+
+feito isso para executar o mongo, basta apenas abrir o terminal de sua preferencia e digitar mongo
+
+para iniciar a instancia do banco, abrir um novo terminal e digitar mongod e caso tudo tenha dado certo...
+
+... :"Waiting for connections","attr":{"port":27017,"ssl":"off"}}
+
+vai te retornar uma mensagem informando a porta
