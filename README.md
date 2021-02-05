@@ -14,7 +14,8 @@
 //isso irá abrir o shell do mongo para programar em linha de comando
 
 // comandos de ajuda:
->help
+
+help
         db.help()                    help on db methods
         db.mycoll.help()             help on collection methods
         sh.help()                    sharding helpers
@@ -42,14 +43,15 @@
 
 //mostra os bancos que estão rodando
 ///se for a primeira vez... só irão aparecer os padrões
->show dbs
+
+show dbs
 admin   0.000GB
 config  0.000GB
 local   0.000GB
 
 // para usar um banco
 
->use shopDB
+use shopDB
 // vai utilizar um banco, porém, ele só irá aparecer quando tiver algum dado internamente
 
 //comando:
